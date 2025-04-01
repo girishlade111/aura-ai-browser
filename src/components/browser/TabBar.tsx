@@ -33,7 +33,6 @@ export function TabBar({
   return (
     <div className="flex items-center h-10 bg-muted/40">
       <ScrollArea 
-        orientation="horizontal" 
         className="flex-1 overflow-hidden"
         ref={scrollRef}
       >

@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { TabBar, type TabData } from "./TabBar";
 import { NavigationControls } from "./NavigationControls";
 import { AddressBar } from "./AddressBar";
@@ -30,12 +30,31 @@ export function Browser() {
   // State for AI Assistant
   const [isAIOpen, setIsAIOpen] = useState(false);
   
-  // Browser content (this would be an iframe in a real browser)
+  // Browser content
   const [currentUrl, setCurrentUrl] = useState("https://www.google.com");
   
-  // Navigation history
-  const [canGoBack, setCanGoBack] = useState(false);
-  const [canGoForward, setCanGoForward] = useState(false);
+  // Navigation history for each tab
+  const [navigationHistory, setNavigationHistory] = useState<Record<string, string[]>>({});
+  const [historyPosition, setHistoryPosition] = useState<Record<string, number>>({});
+  
+  // Refs
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  
+  // Initialize history for new tabs
+  useEffect(() => {
+    const newNavigationHistory = { ...navigationHistory };
+    const newHistoryPosition = { ...historyPosition };
+    
+    tabs.forEach(tab => {
+      if (!newNavigationHistory[tab.id]) {
+        newNavigationHistory[tab.id] = [tab.url];
+        newHistoryPosition[tab.id] = 0;
+      }
+    });
+    
+    setNavigationHistory(newNavigationHistory);
+    setHistoryPosition(newHistoryPosition);
+  }, [tabs]);
   
   // Set current URL based on active tab
   useEffect(() => {
@@ -76,19 +95,109 @@ export function Browser() {
     setActiveTabId(newTab.id);
   };
   
+  // Handle navigation
+  const handleNavigate = (url: string) => {
+    // Update the active tab's URL
+    const updatedTabs = tabs.map(tab => 
+      tab.id === activeTabId 
+        ? { ...tab, url, title: new URL(url).hostname } 
+        : tab
+    );
+    setTabs(updatedTabs);
+    setCurrentUrl(url);
+    
+    // Update navigation history
+    const tabHistory = [...(navigationHistory[activeTabId] || [])];
+    const currentPosition = historyPosition[activeTabId] || 0;
+    
+    // If we're not at the end of history, truncate everything after current position
+    const newHistory = tabHistory.slice(0, currentPosition + 1);
+    newHistory.push(url);
+    
+    setNavigationHistory({
+      ...navigationHistory,
+      [activeTabId]: newHistory
+    });
+    
+    setHistoryPosition({
+      ...historyPosition,
+      [activeTabId]: newHistory.length - 1
+    });
+  };
+  
+  const handleGoBack = () => {
+    const tabHistory = navigationHistory[activeTabId];
+    const currentPosition = historyPosition[activeTabId];
+    
+    if (tabHistory && currentPosition > 0) {
+      const newPosition = currentPosition - 1;
+      const previousUrl = tabHistory[newPosition];
+      
+      // Update position and current URL
+      setHistoryPosition({
+        ...historyPosition,
+        [activeTabId]: newPosition
+      });
+      
+      // Update the tab URL
+      setTabs(tabs.map(tab => 
+        tab.id === activeTabId ? { ...tab, url: previousUrl } : tab
+      ));
+      
+      setCurrentUrl(previousUrl);
+    }
+  };
+  
+  const handleGoForward = () => {
+    const tabHistory = navigationHistory[activeTabId];
+    const currentPosition = historyPosition[activeTabId];
+    
+    if (tabHistory && currentPosition < tabHistory.length - 1) {
+      const newPosition = currentPosition + 1;
+      const nextUrl = tabHistory[newPosition];
+      
+      // Update position and current URL
+      setHistoryPosition({
+        ...historyPosition,
+        [activeTabId]: newPosition
+      });
+      
+      // Update the tab URL
+      setTabs(tabs.map(tab => 
+        tab.id === activeTabId ? { ...tab, url: nextUrl } : tab
+      ));
+      
+      setCurrentUrl(nextUrl);
+    }
+  };
+  
+  const handleRefresh = () => {
+    if (iframeRef.current) {
+      iframeRef.current.src = currentUrl;
+    }
+  };
+  
+  const handleHome = () => {
+    handleNavigate("https://www.google.com");
+  };
+  
+  // Check if we can navigate back/forward
+  const canGoBack = () => {
+    const position = historyPosition[activeTabId];
+    return position && position > 0;
+  };
+  
+  const canGoForward = () => {
+    const position = historyPosition[activeTabId];
+    const history = navigationHistory[activeTabId];
+    return position !== undefined && history && position < history.length - 1;
+  };
+  
   // Handle bookmark actions
   const handleBookmarkClick = (bookmarkId: string) => {
     const bookmark = bookmarks.find(bm => bm.id === bookmarkId);
     if (bookmark) {
-      // In a real browser, we would navigate to this URL
-      toast.info(`Navigating to ${bookmark.title}`);
-      
-      // Update the active tab's URL
-      setTabs(tabs.map(tab => 
-        tab.id === activeTabId 
-          ? { ...tab, title: bookmark.title, url: bookmark.url, icon: bookmark.icon } 
-          : tab
-      ));
+      handleNavigate(bookmark.url);
     }
   };
   
@@ -107,39 +216,17 @@ export function Browser() {
     }
   };
   
-  // Render content frame (in a real browser, this would be an iframe)
+  // Render content frame with iframe
   const renderContentFrame = () => {
-    // For this demo, just show the URL in a content box
     return (
       <div className="flex-1 bg-white dark:bg-zinc-900 flex items-center justify-center">
-        <div className="max-w-2xl w-full p-8 text-center">
-          <h1 className="text-3xl font-bold mb-6">Aura Browser Demo</h1>
-          <p className="text-xl mb-8">
-            Current URL: <span className="text-primary font-medium">{currentUrl}</span>
-          </p>
-          <p className="mb-6">
-            This is a UI demo. In a real browser, this area would display the actual webpage content.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-lg mx-auto text-left">
-            <div className="rounded-lg bg-muted p-4">
-              <h3 className="font-semibold mb-2">Try the features:</h3>
-              <ul className="list-disc pl-5 space-y-1 text-sm">
-                <li>Click tabs to switch between them</li>
-                <li>Add a new tab with the + button</li>
-                <li>Click bookmarks to navigate</li>
-                <li>Toggle light/dark mode</li>
-              </ul>
-            </div>
-            <div className="rounded-lg bg-muted p-4">
-              <h3 className="font-semibold mb-2">AI Features:</h3>
-              <ul className="list-disc pl-5 space-y-1 text-sm">
-                <li>Click the message icon to open AI assistant</li>
-                <li>Type a question and press Enter</li>
-                <li>Get AI-powered answers and help</li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        <iframe 
+          ref={iframeRef}
+          src={currentUrl} 
+          className="w-full h-full border-0"
+          title="Browser Content"
+          sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+        />
       </div>
     );
   };
@@ -158,10 +245,17 @@ export function Browser() {
       {/* Navigation bar */}
       <div className="flex items-center gap-2 px-3 py-2 border-b">
         <NavigationControls
-          canGoBack={canGoBack}
-          canGoForward={canGoForward}
+          canGoBack={canGoBack()}
+          canGoForward={canGoForward()}
+          onBack={handleGoBack}
+          onForward={handleGoForward}
+          onRefresh={handleRefresh}
+          onHome={handleHome}
         />
-        <AddressBar />
+        <AddressBar 
+          initialUrl={currentUrl}
+          onNavigate={handleNavigate}
+        />
         <ActionButtons
           onOpenAI={() => setIsAIOpen(true)}
           onAddBookmark={handleAddBookmark}

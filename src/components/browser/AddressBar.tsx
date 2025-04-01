@@ -2,14 +2,33 @@
 import { Search } from "lucide-react";
 import { useState } from "react";
 
-export function AddressBar() {
-  const [url, setUrl] = useState("https://www.google.com");
+interface AddressBarProps {
+  initialUrl?: string;
+  onNavigate?: (url: string) => void;
+}
+
+export function AddressBar({ initialUrl = "https://www.google.com", onNavigate }: AddressBarProps) {
+  const [url, setUrl] = useState(initialUrl);
   const [isFocused, setIsFocused] = useState(false);
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(`Navigating to: ${url}`);
-    // Here we would handle actual navigation in a real browser
+    
+    // Ensure URL has a protocol
+    let navigateUrl = url;
+    if (!navigateUrl.startsWith('http://') && !navigateUrl.startsWith('https://')) {
+      navigateUrl = `https://${navigateUrl}`;
+    }
+    
+    // Update the URL with the corrected version
+    setUrl(navigateUrl);
+    
+    // Call the navigation callback
+    if (onNavigate) {
+      onNavigate(navigateUrl);
+    }
+    
+    console.log(`Navigating to: ${navigateUrl}`);
   };
   
   return (
