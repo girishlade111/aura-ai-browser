@@ -23,7 +23,7 @@ export function BookmarkBar({
 }: BookmarkBarProps) {
   return (
     <div className={cn("h-9 flex items-center bg-muted/20 px-2", className)}>
-      <ScrollArea orientation="horizontal" className="w-full fade-mask">
+      <ScrollArea className="w-full fade-mask">
         <div className="flex items-center gap-1 py-1">
           {bookmarks.map((bookmark) => (
             <button

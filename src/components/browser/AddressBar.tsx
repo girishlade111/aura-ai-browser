@@ -15,7 +15,7 @@ export function AddressBar({ initialUrl = "https://www.google.com", onNavigate }
     e.preventDefault();
     
     // Ensure URL has a protocol
-    let navigateUrl = url;
+    let navigateUrl = url.trim();
     if (!navigateUrl.startsWith('http://') && !navigateUrl.startsWith('https://')) {
       navigateUrl = `https://${navigateUrl}`;
     }

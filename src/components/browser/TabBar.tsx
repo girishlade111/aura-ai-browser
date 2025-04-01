@@ -1,5 +1,5 @@
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tab } from "./Tab";
@@ -34,7 +34,6 @@ export function TabBar({
     <div className="flex items-center h-10 bg-muted/40">
       <ScrollArea 
         className="flex-1 overflow-hidden"
-        ref={scrollRef}
       >
         <div className="flex items-center h-full fade-mask">
           {tabs.map((tab) => (
