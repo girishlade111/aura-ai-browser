@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { TabBar, type TabData } from "./TabBar";
 import { NavigationControls } from "./NavigationControls";
@@ -225,7 +224,10 @@ export function Browser() {
           src={currentUrl} 
           className="w-full h-full border-0"
           title="Browser Content"
-          sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+          sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals"
+          allow="fullscreen"
+          loading="eager"
+          importance="high"
         />
       </div>
     );

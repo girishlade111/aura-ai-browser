@@ -16,7 +16,11 @@ export function AddressBar({ initialUrl = "https://www.google.com", onNavigate }
     
     // Ensure URL has a protocol
     let navigateUrl = url.trim();
-    if (!navigateUrl.startsWith('http://') && !navigateUrl.startsWith('https://')) {
+    
+    // If it looks like a search query rather than a URL, send it to Google
+    if (!navigateUrl.includes('.') || navigateUrl.includes(' ')) {
+      navigateUrl = `https://www.google.com/search?q=${encodeURIComponent(navigateUrl)}`;
+    } else if (!navigateUrl.startsWith('http://') && !navigateUrl.startsWith('https://')) {
       navigateUrl = `https://${navigateUrl}`;
     }
     
