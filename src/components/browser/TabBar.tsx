@@ -35,7 +35,7 @@ export function TabBar({
       <ScrollArea 
         className="flex-1 overflow-hidden"
       >
-        <div className="flex items-center h-full fade-mask">
+        <div className="flex items-center h-full pr-2">
           {tabs.map((tab) => (
             <Tab
               key={tab.id}

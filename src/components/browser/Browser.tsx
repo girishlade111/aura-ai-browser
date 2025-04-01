@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react";
 import { TabBar, type TabData } from "./TabBar";
 import { NavigationControls } from "./NavigationControls";
@@ -12,6 +13,10 @@ export function Browser() {
   const [tabs, setTabs] = useState<TabData[]>([
     { id: "tab-1", title: "Google", url: "https://www.google.com", icon: "https://www.google.com/favicon.ico" },
     { id: "tab-2", title: "GitHub", url: "https://github.com", icon: "https://github.com/favicon.ico" },
+    { id: "tab-3", title: "ChatGPT", url: "https://chat.openai.com", icon: "https://chat.openai.com/favicon.ico" },
+    { id: "tab-4", title: "Instagram", url: "https://www.instagram.com", icon: "https://www.instagram.com/favicon.ico" },
+    { id: "tab-5", title: "Twitter/X", url: "https://twitter.com", icon: "https://twitter.com/favicon.ico" },
+    { id: "tab-6", title: "Telegram", url: "https://web.telegram.org", icon: "https://web.telegram.org/favicon.ico" },
   ]);
   
   const [activeTabId, setActiveTabId] = useState("tab-1");
@@ -24,6 +29,10 @@ export function Browser() {
     { id: "bm-4", title: "Gmail", url: "https://mail.google.com", icon: "https://mail.google.com/favicon.ico" },
     { id: "bm-5", title: "Netflix", url: "https://www.netflix.com", icon: "https://www.netflix.com/favicon.ico" },
     { id: "bm-6", title: "Amazon", url: "https://www.amazon.com", icon: "https://www.amazon.com/favicon.ico" },
+    { id: "bm-7", title: "ChatGPT", url: "https://chat.openai.com", icon: "https://chat.openai.com/favicon.ico" },
+    { id: "bm-8", title: "Instagram", url: "https://www.instagram.com", icon: "https://www.instagram.com/favicon.ico" },
+    { id: "bm-9", title: "Twitter/X", url: "https://twitter.com", icon: "https://twitter.com/favicon.ico" },
+    { id: "bm-10", title: "Telegram", url: "https://web.telegram.org", icon: "https://web.telegram.org/favicon.ico" },
   ]);
   
   // State for AI Assistant
@@ -227,7 +236,6 @@ export function Browser() {
           sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals"
           allow="fullscreen"
           loading="eager"
-          importance="high"
         />
       </div>
     );
