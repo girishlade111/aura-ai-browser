@@ -1,73 +1,75 @@
-# Welcome to your Lovable project
+# Aura AI Browser
 
-## Project info
+A sleek, AI-powered web browser interface built with React — a polished browser UI mockup/prototype with tab management, a smart address bar, bookmarks, and an integrated AI assistant panel. Originally prototyped with Lovable.
 
-**URL**: https://lovable.dev/projects/81d45d2e-9530-4566-8abb-236fb340c840
+## Features
 
-## How can I edit this code?
+- **Multi-tab browsing UI** — open, switch, and manage browser tabs
+- **Address bar** — enter URLs with quick navigation
+- **Navigation controls** — back, forward, reload actions
+- **Bookmark bar** — save and access bookmarked sites
+- **AI assistant panel** — built-in AI companion sidebar
+- **Theme support** — light / dark / system themes
+- **Modern component library** — shadcn/ui + Radix UI primitives
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+- **Framework:** React 18 + TypeScript
+- **Build tool:** Vite 5
+- **Styling:** Tailwind CSS + tailwindcss-animate
+- **UI components:** shadcn/ui (Radix UI primitives)
+- **Routing:** react-router-dom
+- **State/data:** TanStack React Query
+- **Forms:** react-hook-form + zod
+- **Icons:** lucide-react
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/81d45d2e-9530-4566-8abb-236fb340c840) and start prompting.
+## Quick Start
 
-Changes made via Lovable will be committed automatically to this repo.
+```bash
+# Install dependencies
+npm install
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start the dev server
 npm run dev
+
+# Build for production
+npm run build
+
+# Preview the production build
+npm run preview
 ```
 
-**Edit a file directly in GitHub**
+No environment variables are required — the app is fully client-side.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Project Structure
 
-**Use GitHub Codespaces**
+```
+├── index.html
+├── public/                 # Static assets
+├── src/
+│   ├── main.tsx            # App entry point
+│   ├── App.tsx             # Router + providers
+│   ├── pages/
+│   │   ├── Index.tsx       # Main browser page
+│   │   └── NotFound.tsx    # 404 page
+│   ├── components/
+│   │   ├── browser/        # Browser UI: tabs, address bar, bookmarks,
+│   │   │                   # navigation controls, AI assistant
+│   │   └── ui/             # shadcn/ui components
+│   ├── hooks/
+│   └── lib/
+├── tailwind.config.ts
+└── vite.config.ts
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Deploy
 
-## What technologies are used for this project?
+The production build outputs to `dist/` and can be hosted on any static host (Cloudflare Pages, Netlify, GitHub Pages):
 
-This project is built with:
+```bash
+npm run build   # dist/
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Author
 
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/81d45d2e-9530-4566-8abb-236fb340c840) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes it is!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Built by Girish Lade — [ladestack.in](https://ladestack.in)
